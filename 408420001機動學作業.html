@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html>
+<body bgcolor="#ECFFFF" >
+<h1>機動學html作業 408420001王宇軒</h1>
+<canvas id="bar" width="650" height="300" style="border:3px solid #FF8800 ;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+<script>
+var c = document.getElementById("bar");
+var ctx = c.getContext("2d");
+var sp;
+var ep;
+var l2=100;
+var t2=1.05;
+var dt2=0.05;
+var os;
+
+var lg=350;
+
+var sh=20;
+var sw=20;
+
+var ls=200;
+var ts;
+var ep2;
+
+var dts;
+var ddts;
+
+var V;
+var A;
+
+function origin(){
+
+
+	ts=Math.asin((-1)*l2*Math.sin(t2)/ls);
+
+	ctx.clearRect(0, 0, bar.width, bar.height);
+
+	sp={
+		x:150,
+		y:150
+	   };
+	ep={
+		x:sp.x + l2*Math.cos(t2),
+		y:sp.y - l2*Math.sin(t2)
+	   };
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = "green";
+	ctx.beginPath();
+	ctx.moveTo(sp.x,sp.y);
+	ctx.lineTo(ep.x,ep.y);
+	ctx.stroke();
+	
+	ctx.lineWidth = 2.5;
+	ctx.strokeStyle = "black";
+	ctx.beginPath();
+	ctx.moveTo(sp.x,sp.y);
+	ctx.lineTo(sp.x+lg,sp.y);
+	ctx.stroke();
+
+	ep2={
+		x:ep.x + ls*Math.cos(ts),
+		y:sp.y
+	   };
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = "blue";
+	ctx.beginPath();
+	ctx.moveTo(ep.x,ep.y);
+	ctx.lineTo(ep2.x,ep2.y);
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.fillStyle = "orange";
+	ctx.fillRect(ep2.x-sw/2,ep2.y-sh/2,20,20);
+
+	ctx.beginPath();
+	ctx.fillStyle = "red";
+	ctx.font = "20px Arial";
+	ctx.fillText("o",sp.x-20,sp.y);
+
+	
+	ctx.beginPath();
+	ctx.fillStyle = "red";
+	ctx.font = "20px Arial";
+	ctx.fillText("q",ep.x-20,ep.y);
+
+	
+	ctx.beginPath();
+	ctx.fillStyle = "red";
+	ctx.font = "20px Arial";
+	ctx.fillText("p",ep2.x,ep2.y+20);
+
+}
+origin();
+function rotate(){
+
+		t2=t2+dt2;
+
+	ts=Math.asin(-1*l2*Math.sin(t2)/ls);
+	dts=(-1)*l2*dt2*Math.cos(t2)/ls/Math.cos(ts);
+	ddts=(l2*dt2/ls)*(dt2*Math.cos(ts)*Math.sin(t2)-dts*Math.sin(ts)*Math.cos(t2))/(Math.cos(ts)*Math.cos(ts));
+	V=(-1)*l2*Math.sin(t2)*dt2-ls*Math.sin(ts)*dts;
+	A=-(l2*Math.cos(t2)*dt2*dt2+ls*Math.cos(ts)*dts*dts+ls*Math.sin(ts)*ddts);
+
+	ctx.clearRect(0, 0, bar.width, bar.height);
+	sp={
+		x:150,
+		y:150
+	};
+	ep={
+		x:sp.x+l2*Math.cos(t2),
+		y:sp.y-l2*Math.sin(t2)
+	};
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = "green";
+	ctx.beginPath();
+	ctx.moveTo(sp.x,sp.y);
+	ctx.lineTo(ep.x,ep.y);
+	ctx.stroke();
+
+	ctx.lineWidth = 2.5;
+	ctx.strokeStyle = "black";
+	ctx.beginPath();
+	ctx.moveTo(sp.x,sp.y);
+	ctx.lineTo(sp.x+lg,sp.y);
+	ctx.stroke();
+
+	ep2={
+		x:ep.x + ls*Math.cos(ts),
+		y:sp.y
+	   };
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = "blue";
+	ctx.beginPath();
+	ctx.moveTo(ep.x,ep.y);
+	ctx.lineTo(ep2.x,ep2.y);
+	ctx.stroke();
+
+	ctx.fillStyle = "orange";
+	ctx.fillRect(ep2.x-sw/2,ep2.y-sh/2,20,20);
+
+	ctx.beginPath();
+	ctx.fillStyle = "red";
+	ctx.font = "20px Arial";
+	ctx.fillText("o",sp.x-20,sp.y);
+
+	
+	ctx.beginPath();
+	ctx.fillStyle = "red";
+	ctx.font = "20px Arial";
+	ctx.fillText("q",ep.x-20,ep.y);
+
+	
+	ctx.beginPath();
+	ctx.fillStyle = "red";
+	ctx.font = "20px Arial";
+	ctx.fillText("p",ep2.x,ep2.y+20);
+
+document.getElementById("epx").innerHTML =Math.floor(ep.x);
+document.getElementById("epy").innerHTML =Math.floor(ep.y);
+document.getElementById("ep2x").innerHTML =Math.floor(ep2.x);
+document.getElementById("ep2y").innerHTML =Math.floor(ep2.y);
+document.getElementById("woq").innerHTML =dt2;
+document.getElementById("aoq").innerHTML =0;
+document.getElementById("wpq").innerHTML =Math.floor(dts*1000)/1000;
+document.getElementById("apq").innerHTML =Math.floor(ddts*1000)/1000;
+document.getElementById("Vp").innerHTML =Math.floor(V*1000)/1000;
+document.getElementById("Ap").innerHTML =Math.floor(A*1000)/1000;
+}
+function start(){
+	os=setInterval(rotate,50);
+}
+function pause(){
+	clearInterval(os);
+}
+</script>
+<button type="button" onclick="start()" style="position: absolute; top:120px;left:520px; width:90px;">
+Start</button>
+
+<button type="button" onclick="pause()" style="position: absolute; top:160px;left:520px; width:90px;">
+Pause</button>
+
+<table border="2">
+	<tr>
+		<td colspan="4" width="480px">監控式</td>
+	</tr>
+	<tr>
+		<td width="120px">Xp:</td>
+		<td width="120px" id="epx"></td>
+		<td width="120px">Yp:</td>
+		<td width="120px" id="epy"></td>
+	</tr>
+	<tr>
+		<td width="120px">Xq:</td>
+		<td width="120px" id="ep2x"></td>
+		<td width="120px">Yq:</td>
+		<td width="120px" id="ep2y"></td>
+	</tr>
+	<tr>
+		<td width="120px">ωoq:</td>
+		<td width="120px" id="woq"></td>
+		<td width="120px">αoq:</td>
+		<td width="120px" id="aoq"></td>
+	</tr>
+	<tr>
+		<td width="120px">ωpq:</td>
+		<td width="120px" id="wpq"></td>
+		<td width="120px">αqp:</td>
+		<td width="120px" id="apq"></td>
+	</tr>
+	<tr>
+		<td width="120px">Vp:</td>
+		<td width="120px" id="Vp"></td>
+		<td width="120px">Ap:</td>
+		<td width="120px" id="Ap"></td>
+	</tr>
+</table>
+
+</body>
+</html>
